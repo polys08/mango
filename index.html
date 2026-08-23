@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mango café</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header class="topbar">
+    <a class="about-link" href="sobre.html">sobre nós</a>
+  </header>
+
+  <main class="hero">
+    <div class="hero-inner">
+      <div class="logo-wrap">
+        <img src="img/produtos/logomango.png" alt="Mango Café" class="logo-img">
+      </div>
+
+      <a href="cardapio.html" id="cardapio-link" class="cup-btn">
+        <svg class="cup-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M14 26h30v16a10 10 0 0 1-10 10H24a10 10 0 0 1-10-10V26Z" stroke="currentColor" stroke-width="3"
+            stroke-linejoin="round" />
+          <path d="M44 30h4a6 6 0 0 1 0 12h-4" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M21 20c0-2 2-3 2-5s-2-3-2-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M29 20c0-2 2-3 2-5s-2-3-2-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        </svg>
+        <span>cardápio</span>
+      </a>
+    </div>
+
+    <div class="hero-rule" aria-hidden="true"></div>
+  </main>
+
+  <footer class="foot">
+    <p>&middot; mango café &middot;</p>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const mesa = params.get("mesa");
+    if (mesa) {
+      const link = document.getElementById("cardapio-link");
+      link.href = `cardapio.html?mesa=${encodeURIComponent(mesa)}`;
+    }
+  </script>
+</body>
+
+</html>

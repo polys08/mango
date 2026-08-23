@@ -1,0 +1,263 @@
+/* ===== Admin — layout específico ===== */
+/* Depende das variáveis definidas em style.css (:root) e reaproveita .menu-header do cardápio */
+
+body.admin-body {
+  align-items: stretch;
+}
+
+.admin-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--bg);
+  letter-spacing: 0.01em;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 26px clamp(18px, 5vw, 48px) 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ===== Destaque / ranking ===== */
+.highlight-card {
+  background: var(--maroon);
+  color: var(--bg);
+  border-radius: 18px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--sans);
+}
+
+.highlight-card .highlight-label {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  opacity: 0.9;
+}
+
+.highlight-card .highlight-value {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.highlight-card .highlight-sub {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+/* ===== Filtros ===== */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 22px;
+  padding: 16px 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-label {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  opacity: 0.6;
+}
+
+.btn-status {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  padding: 6px 16px;
+  opacity: 0.6;
+}
+
+.btn-status:hover {
+  opacity: 0.9;
+  color: var(--ink);
+}
+
+.btn-status.active {
+  background: var(--maroon);
+  border-color: var(--maroon);
+  color: var(--bg);
+  opacity: 1;
+}
+
+.mesa-select {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  border-color: var(--line);
+  color: var(--ink);
+  max-width: 140px;
+}
+
+.mesa-select:focus {
+  border-color: var(--maroon);
+  box-shadow: 0 0 0 0.2rem rgba(90, 28, 33, 0.15);
+}
+
+/* ===== Tabela de pedidos ===== */
+.orders-wrap {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.orders-table {
+  margin: 0;
+  font-family: var(--sans);
+}
+
+.orders-table thead th {
+  background: var(--card);
+  color: var(--ink);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+  font-weight: 700;
+  border-bottom: 1px solid var(--line);
+  padding: 12px 16px;
+}
+
+.orders-table tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9rem;
+  color: var(--ink);
+  vertical-align: middle;
+}
+
+.orders-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.order-mesa {
+  font-family: var(--serif);
+  font-weight: 600;
+  color: var(--maroon);
+  font-size: 1.05rem;
+}
+
+.order-itens {
+  max-width: 320px;
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+.order-total {
+  font-weight: 700;
+  color: var(--maroon);
+}
+
+/* Badges de status */
+.status-badge {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.status-badge.status-aberto {
+  background: rgba(228, 196, 99, 0.35);
+  color: #8a6a1a;
+}
+
+.status-badge.status-entregue {
+  background: rgba(173, 211, 242, 0.5);
+  color: #235175;
+}
+
+.status-badge.status-pago {
+  background: rgba(90, 28, 33, 0.12);
+  color: var(--maroon);
+}
+
+/* Botão de avançar status */
+.advance-btn {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.78rem;
+  border: none;
+  border-radius: 999px;
+  padding: 7px 16px;
+  background: var(--gold);
+  color: var(--maroon);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.advance-btn:hover { background: var(--gold-dk); transform: translateY(-1px); }
+.advance-btn:disabled {
+  background: transparent;
+  color: var(--ink);
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.empty-state,
+.error-state,
+.loading-state {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink);
+  opacity: 0.6;
+  padding: 30px 4px;
+  text-align: center;
+}
+
+.error-state { color: var(--maroon); opacity: 0.85; }
+
+/* ===== Toast (reaproveitado do cardápio) ===== */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  translate: -50% 0;
+  background: var(--maroon);
+  color: var(--bg);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  padding: 12px 22px;
+  border-radius: 999px;
+  box-shadow: 0 10px 24px -8px rgba(59, 35, 20, 0.5);
+  z-index: 60;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translate(-50%, 8px);
+}
+
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.error { background: #7a2b26; }
+
+/* ===== Mobile ===== */
+@media (max-width: 620px) {
+  .filter-bar { flex-direction: column; align-items: flex-start; }
+  .order-itens { max-width: 180px; }
+}
