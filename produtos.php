@@ -22,22 +22,40 @@ switch ($metodo) {
 }
 
 function listar($pdo) {
+    // Paginação (via stored procedure listar_produtos_paginado)
+    if (isset($_GET['limite']) || isset($_GET['offset'])) {
+        $limite = isset($_GET['limite']) ? (int) $_GET['limite'] : 10;
+        $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
+
+        $stmt = $pdo->prepare('CALL listar_produtos_paginado(:limite, :offset)');
+        $stmt->execute(['limite' => $limite, 'offset' => $offset]);
+        $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor(); // necessário após CALL para liberar a conexão
+
+        echo json_encode($produtos);
+        return;
+    }
+
+    // Filtro por categoria (via stored procedure listar_produtos_por_categoria)
+    if (!empty($_GET['categoria_id'])) {
+        $stmt = $pdo->prepare('CALL listar_produtos_por_categoria(:categoria_id)');
+        $stmt->execute(['categoria_id' => $_GET['categoria_id']]);
+        $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        echo json_encode($produtos);
+        return;
+    }
+
+    // Sem filtro: lista completa (usada pelo painel de admin), mantém a query original
     $sql = 'SELECT produtos.id, produtos.nome, produtos.descricao, produtos.preco, produtos.categoria_id, produtos.imagem,
                     categorias.nome AS categoria_nome
             FROM produtos
-            JOIN categorias ON produtos.categoria_id = categorias.id';
-
-    $parametros = [];
-
-    if (!empty($_GET['categoria_id'])) {
-        $sql .= ' WHERE produtos.categoria_id = :categoria_id';
-        $parametros['categoria_id'] = $_GET['categoria_id'];
-    }
-
-    $sql .= ' ORDER BY produtos.nome';
+            JOIN categorias ON produtos.categoria_id = categorias.id
+            ORDER BY produtos.nome';
 
     $stmt = $pdo->prepare($sql);
-    $stmt->execute($parametros);
+    $stmt->execute();
     $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($produtos);
 }

@@ -1,8 +1,4 @@
-// ===== Mango Café — painel administrativo =====
-// Consome api/pedidos.php, api/itens_pedido.php, api/produtos.php e api/mesas.php via fetch.
-// ---------- Config ----------
 const API_BASE = "../api";
-// ---------- Estado ----------
 let pedidos = [];
 let itensPedido = [];
 let produtos = [];
@@ -21,7 +17,6 @@ const ROTULO_ACAO = {
     entregue: "marcar como pago",
     pago: "concluído",
 };
-// ---------- Utilidades ----------
 function formatarPreco(preco) {
     const valor = typeof preco === "string" ? parseFloat(preco) : preco;
     const valorValido = Number.isFinite(valor) ? valor : 0;
@@ -63,13 +58,11 @@ async function apiPut(caminho, corpo) {
     }
     return resposta.json();
 }
-// ---------- Elementos do DOM ----------
 const highlightCardEl = document.getElementById("highlight-card");
 const ordersBodyEl = document.getElementById("orders-body");
 const mesaFilterEl = document.getElementById("mesa-filter");
 const statusBtns = Array.from(document.querySelectorAll(".btn-status"));
 const toastEl = document.getElementById("toast");
-// ---------- Toast ----------
 let toastTimer;
 function mostrarToast(mensagem, tipo = "ok") {
     if (!toastEl)
@@ -80,7 +73,6 @@ function mostrarToast(mensagem, tipo = "ok") {
     window.clearTimeout(toastTimer);
     toastTimer = window.setTimeout(() => toastEl.classList.remove("show"), 3200);
 }
-// ---------- Carregamento e montagem dos dados ----------
 async function carregarTudo() {
     if (ordersBodyEl) {
         ordersBodyEl.innerHTML = `<tr><td colspan="6" class="loading-state">carregando pedidos…</td></tr>`;
@@ -104,18 +96,14 @@ async function carregarTudo() {
         }
     }
 }
-// Junta pedidos + itens_pedido + produtos + mesas em algo pronto para a tela.
 function montarPedidosDetalhados() {
     pedidosDetalhados = pedidos.map((pedido) => {
-        // filter(): separa só os itens deste pedido dentro da lista completa
         const itensDoPedido = itensPedido.filter((item) => item.pedido_id === pedido.id);
-        // map(): transforma cada item em uma linha de texto pronta para exibir ("2x Latte")
         const linhasItens = itensDoPedido.map((item) => {
             const produto = produtos.find((p) => p.id === item.produto_id);
             const nome = produto ? produto.nome : "produto removido";
             return `${item.quantidade}x ${nome}`;
         });
-        // reduce(): soma o valor de todos os itens do pedido em um total financeiro
         const total = itensDoPedido.reduce((soma, item) => {
             const produto = produtos.find((p) => p.id === item.produto_id);
             const preco = produto ? precoNumerico(produto.preco) : 0;
@@ -147,20 +135,19 @@ function preencherFiltroDeMesas() {
         mesaFilterEl.value = valorAtual;
     }
 }
-// ---------- Destaque do dia (ranking dinâmico) ----------
 function renderizarDestaque() {
+    var _a;
     if (!highlightCardEl)
         return;
     if (itensPedido.length === 0) {
         highlightCardEl.innerHTML = `<p class="highlight-sub">ainda não há pedidos suficientes para calcular um destaque.</p>`;
         return;
     }
-    // reduce(): conta a quantidade pedida de cada produto, indexado por produto_id
     const quantidadePorProduto = itensPedido.reduce((contagem, item) => {
-        contagem[item.produto_id] = (contagem[item.produto_id] ?? 0) + item.quantidade;
+        var _a;
+        contagem[item.produto_id] = ((_a = contagem[item.produto_id]) !== null && _a !== void 0 ? _a : 0) + item.quantidade;
         return contagem;
     }, {});
-    // reduce(): encontra o produto com maior quantidade sem precisar ordenar tudo
     const idMaisPedidoStr = Object.keys(quantidadePorProduto).reduce((idMaisVendido, idAtual) => {
         return quantidadePorProduto[Number(idAtual)] > quantidadePorProduto[Number(idMaisVendido)]
             ? idAtual
@@ -172,14 +159,12 @@ function renderizarDestaque() {
     highlightCardEl.innerHTML = `
     <div>
       <p class="highlight-label">destaque do dia</p>
-      <p class="highlight-value">${escapeHtml(produtoDestaque?.nome ?? "produto removido")}</p>
+      <p class="highlight-value">${escapeHtml((_a = produtoDestaque === null || produtoDestaque === void 0 ? void 0 : produtoDestaque.nome) !== null && _a !== void 0 ? _a : "produto removido")}</p>
       <p class="highlight-sub">${quantidadeDestaque} unidade(s) pedidas até agora</p>
     </div>
   `;
 }
-// ---------- Filtro (segmentação de pedidos) ----------
 function pedidosFiltrados() {
-    // filter(): aplica o filtro de negócio escolhido (status e/ou mesa) sobre a lista completa
     return pedidosDetalhados.filter((pd) => {
         const passaStatus = filtroStatusAtivo === "todos" || pd.pedido.status === filtroStatusAtivo;
         const passaMesa = filtroMesaAtivo === "todas" || pd.pedido.mesa_numero === filtroMesaAtivo;
@@ -189,7 +174,6 @@ function pedidosFiltrados() {
 function ordenarPorRecente(lista) {
     return lista.slice().sort((a, b) => b.pedido.id - a.pedido.id);
 }
-// ---------- Renderização da tabela ----------
 function renderizarPedidos() {
     if (!ordersBodyEl)
         return;
@@ -233,7 +217,6 @@ async function avancarStatus(pedido, novoStatus) {
         mostrarToast("não foi possível atualizar o status. tente novamente.", "error");
     }
 }
-// ---------- Eventos de filtro ----------
 statusBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
         const status = btn.dataset.status;
@@ -244,12 +227,11 @@ statusBtns.forEach((btn) => {
         renderizarPedidos();
     });
 });
-mesaFilterEl?.addEventListener("change", () => {
+mesaFilterEl === null || mesaFilterEl === void 0 ? void 0 : mesaFilterEl.addEventListener("change", () => {
     const valor = mesaFilterEl.value;
     filtroMesaAtivo = valor === "todas" ? "todas" : Number(valor);
     renderizarPedidos();
 });
-// ---------- Inicialização ----------
 document.addEventListener("DOMContentLoaded", () => {
     void carregarTudo();
 });

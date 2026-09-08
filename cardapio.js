@@ -130,8 +130,11 @@ function renderizarProdutos(produtos, nomeCategoria) {
     produtos.forEach((produto) => {
         const card = document.createElement("article");
         card.className = "product-card";
+        const mediaHtml = produto.imagem
+            ? `<img class="product-photo" src="img/produtos/${escapeHtml(produto.imagem)}" alt="${escapeHtml(produto.nome)}">`
+            : `<div class="product-icon">${icone}</div>`;
         card.innerHTML = `
-      <div class="product-icon">${icone}</div>
+      ${mediaHtml}
       <h3 class="product-name">${escapeHtml(produto.nome)}</h3>
       ${produto.descricao ? `<p class="product-desc">${escapeHtml(produto.descricao)}</p>` : `<p class="product-desc"></p>`}
       <div class="product-footer">
@@ -276,6 +279,10 @@ async function resolverMesaAtual() {
     }
     finally {
         atualizarEstadoBotaoEnviar();
+    }
+    const logoLink = document.getElementById("logo-link");
+    if (logoLink && mesaSelecionada) {
+        logoLink.href = `index.html?mesa=${mesaSelecionada.numero}`;
     }
 }
 function exibirErroMesa() {

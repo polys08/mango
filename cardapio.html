@@ -1,37 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>cardápio — mango café</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/cardapio.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cardápio — mango café</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/cardapio.css">
 </head>
+
 <body class="menu-body">
 
   <!-- Cabeçalho -->
-  <header class="menu-header">
-    <a class="menu-logo-link" href="index.html" id="logo-link">
-      <img src="img/produtos/logocardapio.png" alt="Mango Café" class="menu-logo">
-    </a>
-    <div class="menu-header-actions">
-      <span id="mesa-indicator" class="mesa-indicator">mesa —</span>
-      <a class="cart-btn" href="admin.html" aria-label="Painel administrativo" title="painel administrativo">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-      </a>
-      <button type="button" id="cart-btn" class="cart-btn" aria-label="Ver pedido">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 8V6a6 6 0 1 1 12 0v2M4 8h16l-1.2 12.1a2 2 0 0 1-2 1.9H7.2a2 2 0 0 1-2-1.9L4 8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-        </svg>
-        <span id="cart-badge" class="cart-badge" hidden>0</span>
-      </button>
-    </div>
-  </header>
+  <div id="menu-header-placeholder" data-page="cardapio"></div>
+  <script src="js/components/header.js"></script>
 
   <!-- Categorias -->
   <nav class="cat-nav" id="cat-nav" aria-label="Categorias do cardápio">
@@ -69,15 +56,16 @@
     </div>
   </aside>
 
-<div class="mesa-overlay" id="mesa-overlay" hidden>
-  <div class="mesa-modal">
-    <h2>mesa não identificada</h2>
-    <p>não foi possível identificar o número da mesa neste dispositivo. chame um atendente.</p>
+  <div class="mesa-overlay" id="mesa-overlay" hidden>
+    <div class="mesa-modal">
+      <h2>mesa não identificada</h2>
+      <p>não foi possível identificar o número da mesa neste dispositivo. chame um atendente.</p>
+    </div>
   </div>
-</div>
 
   <div class="toast" id="toast"></div>
 
   <script type="module" src="js/cardapio.js"></script>
 </body>
+
 </html>
