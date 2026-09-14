@@ -120,6 +120,20 @@ function iconeParaCategoria(nomeCategoria: string): string {
   return ICONE_PADRAO;
 }
 
+// ---------- Tag de produto (só na seção salgados) ----------
+
+const NOMES_HALAL_SALGADOS = ["empada", "shawarma"];
+
+function obterTagProduto(produto: Produto, nomeCategoria: string): { classe: string; conteudo: string } | null {
+  if (!nomeCategoria.toLowerCase().includes("salgado")) return null;
+  const nome = produto.nome.trim().toLowerCase();
+
+  if (NOMES_HALAL_SALGADOS.includes(nome)) {
+    return { classe: "tag-halal", conteudo: `<span>halal</span>` };
+  }
+  return null;
+}
+
 // ---------- Toast ----------
 
 let toastTimer: number | undefined;
@@ -206,8 +220,14 @@ function renderizarProdutos(produtos: Produto[], nomeCategoria: string): void {
       ? `<img class="product-photo" src="img/produtos/${escapeHtml(produto.imagem)}" alt="${escapeHtml(produto.nome)}">`
       : `<div class="product-icon">${icone}</div>`;
 
+    const tag = obterTagProduto(produto, nomeCategoria);
+    const tagHtml = tag ? `<span class="product-tag ${tag.classe}">${tag.conteudo}</span>` : "";
+
     card.innerHTML = `
-      ${mediaHtml}
+      <div class="product-media">
+        ${mediaHtml}
+        ${tagHtml}
+      </div>
       <h3 class="product-name">${escapeHtml(produto.nome)}</h3>
       ${produto.descricao ? `<p class="product-desc">${escapeHtml(produto.descricao)}</p>` : `<p class="product-desc"></p>`}
       <div class="product-footer">
@@ -371,7 +391,7 @@ async function resolverMesaAtual(): Promise<void> {
   const logoLink = document.getElementById("logo-link") as HTMLAnchorElement | null;
   if (logoLink && mesaSelecionada) {
     logoLink.href = `index.html?mesa=${mesaSelecionada.numero}`;
-}
+  }
 }
 
 function exibirErroMesa(): void {

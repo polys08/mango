@@ -62,6 +62,16 @@ function iconeParaCategoria(nomeCategoria) {
         return ICONE_DOCE;
     return ICONE_PADRAO;
 }
+const NOMES_HALAL_SALGADOS = ["empada", "shawarma"];
+function obterTagProduto(produto, nomeCategoria) {
+    if (!nomeCategoria.toLowerCase().includes("salgado"))
+        return null;
+    const nome = produto.nome.trim().toLowerCase();
+    if (NOMES_HALAL_SALGADOS.includes(nome)) {
+        return { classe: "tag-halal", conteudo: `<span>halal</span>` };
+    }
+    return null;
+}
 let toastTimer;
 function mostrarToast(mensagem, tipo = "ok") {
     toastEl.textContent = mensagem;
@@ -133,8 +143,13 @@ function renderizarProdutos(produtos, nomeCategoria) {
         const mediaHtml = produto.imagem
             ? `<img class="product-photo" src="img/produtos/${escapeHtml(produto.imagem)}" alt="${escapeHtml(produto.nome)}">`
             : `<div class="product-icon">${icone}</div>`;
+        const tag = obterTagProduto(produto, nomeCategoria);
+        const tagHtml = tag ? `<span class="product-tag ${tag.classe}">${tag.conteudo}</span>` : "";
         card.innerHTML = `
-      ${mediaHtml}
+      <div class="product-media">
+        ${mediaHtml}
+        ${tagHtml}
+      </div>
       <h3 class="product-name">${escapeHtml(produto.nome)}</h3>
       ${produto.descricao ? `<p class="product-desc">${escapeHtml(produto.descricao)}</p>` : `<p class="product-desc"></p>`}
       <div class="product-footer">
