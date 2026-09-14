@@ -1,6 +1,3 @@
-/* ===== Admin — layout específico ===== */
-/* Depende das variáveis definidas em style.css (:root) e reaproveita .menu-header do cardápio */
-
 body.admin-body {
   align-items: stretch;
 }
@@ -21,7 +18,7 @@ body.admin-body {
   gap: 22px;
 }
 
-/* ===== Destaque / ranking ===== */
+-destaque / ranking
 .highlight-card {
   background: var(--maroon);
   color: var(--bg);
@@ -52,7 +49,7 @@ body.admin-body {
   opacity: 0.75;
 }
 
-/* ===== Filtros ===== */
+-filtros
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -115,7 +112,7 @@ body.admin-body {
   box-shadow: 0 0 0 0.2rem rgba(90, 28, 33, 0.15);
 }
 
-/* ===== Tabela de pedidos ===== */
+-tabela de pedidos
 .orders-wrap {
   background: var(--bg);
   border: 1px solid var(--line);
@@ -170,7 +167,7 @@ body.admin-body {
   color: var(--maroon);
 }
 
-/* Badges de status */
+-badges de status
 .status-badge {
   font-family: var(--sans);
   font-size: 0.72rem;
@@ -197,7 +194,7 @@ body.admin-body {
   color: var(--maroon);
 }
 
-/* Botão de avançar status */
+-botão de avançar status
 .advance-btn {
   font-family: var(--sans);
   font-weight: 700;
@@ -233,7 +230,7 @@ body.admin-body {
 
 .error-state { color: var(--maroon); opacity: 0.85; }
 
-/* ===== Toast (reaproveitado do cardápio) ===== */
+-toast reaproveitado do cardápio
 .toast {
   position: fixed;
   left: 50%;
@@ -256,7 +253,9 @@ body.admin-body {
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 .toast.error { background: #7a2b26; }
 
-/* ===== Mobile ===== */
+
+
+
 @media (max-width: 620px) {
   .filter-bar { flex-direction: column; align-items: flex-start; }
   .order-itens { max-width: 180px; }

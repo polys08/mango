@@ -1,11 +1,3 @@
-// ===== Mango Café — header compartilhado =====
-// Centraliza o cabeçalho usado em cardapio.html e admin.html.
-// Uso: <div id="menu-header-placeholder" data-page="cardapio"></div>
-//      <script src="js/components/header.js"></script>
-// (o script deve vir logo depois do placeholder e ANTES do cardapio.js/admin.js,
-// para que os elementos do header já existam quando esses módulos rodarem)
-
-// Lê ?mesa= da URL atual e devolve "?mesa=N" (ou "" se não houver mesa)
 function obterQueryMesa() {
   const numero = new URLSearchParams(window.location.search).get("mesa");
   return numero ? `?mesa=${encodeURIComponent(numero)}` : "";

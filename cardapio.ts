@@ -1,8 +1,5 @@
-// ===== Mango Café — lógica do cardápio =====
-// Consome api/categorias.php, api/produtos.php, api/mesas.php,
-// api/pedidos.php e api/itens_pedido.php via fetch.
 
-// ---------- Tipos ----------
+// - tipos
 
 interface Categoria {
   id: number;
@@ -12,7 +9,7 @@ interface Categoria {
 interface Produto {
   id: number;
   nome: string;
-  preco: number | string; // MariaDB costuma devolver DECIMAL como string
+  preco: number | string;
   categoria_id: number;
   descricao?: string | null;
   imagem?: string | null;
@@ -35,11 +32,11 @@ interface ItemCarrinho {
   quantidade: number;
 }
 
-// ---------- Config ----------
+// - config
 
 const API_BASE = "../api";
 
-// ---------- Estado ----------
+// - estado
 
 let categorias: Categoria[] = [];
 let categoriaAtivaId: number | null = null;
@@ -47,7 +44,7 @@ let carrinho: ItemCarrinho[] = [];
 let mesaSelecionada: Mesa | null = null;
 let enviandoPedido = false;
 
-// ---------- Utilidades ----------
+// - utilidades
 
 function formatarPreco(preco: number | string): string {
   const valor = typeof preco === "string" ? parseFloat(preco) : preco;
@@ -84,7 +81,7 @@ async function apiPost<T>(caminho: string, corpo: unknown): Promise<T> {
   return resposta.json() as Promise<T>;
 }
 
-// ---------- Elementos do DOM ----------
+// - elementos do DOM
 
 const catNavEl = document.getElementById("cat-nav") as HTMLElement;
 const sectionTitleEl = document.getElementById("section-title") as HTMLElement;
@@ -105,7 +102,7 @@ const mesaIndicator = document.getElementById("mesa-indicator") as HTMLElement;
 
 const toastEl = document.getElementById("toast") as HTMLElement;
 
-// ---------- Ícones por categoria (decorativo) ----------
+// - ícones por categoria (decorativo)
 
 const ICONE_PADRAO = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 26h30v16a10 10 0 0 1-10 10H24a10 10 0 0 1-10-10V26Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M44 30h4a6 6 0 0 1 0 12h-4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
@@ -120,7 +117,7 @@ function iconeParaCategoria(nomeCategoria: string): string {
   return ICONE_PADRAO;
 }
 
-// ---------- Tag de produto (só na seção salgados) ----------
+// - tag de produto (só na seção salgados)
 
 const NOMES_HALAL_SALGADOS = ["empada", "shawarma"];
 
@@ -134,7 +131,7 @@ function obterTagProduto(produto: Produto, nomeCategoria: string): { classe: str
   return null;
 }
 
-// ---------- Toast ----------
+// - toast
 
 let toastTimer: number | undefined;
 
@@ -146,7 +143,7 @@ function mostrarToast(mensagem: string, tipo: "ok" | "error" = "ok"): void {
   toastTimer = window.setTimeout(() => toastEl.classList.remove("show"), 3200);
 }
 
-// ---------- Categorias ----------
+// - categorias
 
 async function carregarCategorias(): Promise<void> {
   catNavEl.innerHTML = `<p class="loading-state">carregando categorias…</p>`;
@@ -184,7 +181,7 @@ async function selecionarCategoria(id: number): Promise<void> {
   await carregarProdutos(id);
 }
 
-// ---------- Produtos ----------
+// - produtos
 
 async function carregarProdutos(categoriaId: number): Promise<void> {
   const categoria = categorias.find((c) => c.id === categoriaId);
@@ -247,7 +244,7 @@ function escapeHtml(texto: string): string {
   return div.innerHTML;
 }
 
-// ---------- Carrinho ----------
+// - carrinho
 
 function adicionarAoCarrinho(produto: Produto): void {
   const itemExistente = carrinho.find((item) => item.produto.id === produto.id);
@@ -357,7 +354,7 @@ function restaurarCarrinho(): void {
   }
 }
 
-// ---------- Mesa ----------
+// - mesa
 
 async function resolverMesaAtual(): Promise<void> {
   const paramMesa = new URLSearchParams(window.location.search).get("mesa");
@@ -409,7 +406,7 @@ function atualizarIndicadorMesa(): void {
   }
 }
 
-// ---------- Envio do pedido ----------
+// - envio do pedido
 
 async function obterOuCriarPedidoAberto(mesaId: number): Promise<Pedido> {
   const pedidos = await apiGet<Pedido[]>("pedidos.php");
@@ -428,7 +425,6 @@ async function enviarPedido(): Promise<void> {
   try {
     const pedido = await obterOuCriarPedidoAberto(mesaSelecionada.id);
 
-    // envia os itens em sequência para não sobrecarregar a API
     for (const item of carrinho) {
       await apiPost("itens_pedido.php", {
         pedido_id: pedido.id,
@@ -451,7 +447,7 @@ async function enviarPedido(): Promise<void> {
   }
 }
 
-// ---------- Eventos ----------
+// - eventos
 
 cartBtn.addEventListener("click", abrirCarrinho);
 cartCloseBtn.addEventListener("click", fecharCarrinho);
@@ -460,7 +456,7 @@ sendOrderBtn.addEventListener("click", () => {
   void enviarPedido();
 });
 
-// ---------- Inicialização ----------
+// - inicialização
 
 async function iniciar(): Promise<void> {
   restaurarCarrinho();

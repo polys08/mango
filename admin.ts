@@ -1,9 +1,6 @@
-// ===== Mango Café — painel administrativo =====
-// Consome api/pedidos.php, api/itens_pedido.php, api/produtos.php e api/mesas.php via fetch.
+export {};
 
-export {}; // torna este arquivo um módulo isolado, evitando colisão de nomes com cardapio.ts
-
-// ---------- Tipos ----------
+// - tipos
 
 type StatusPedido = "aberto" | "entregue" | "pago";
 type FiltroStatus = "todos" | StatusPedido;
@@ -23,7 +20,7 @@ interface Mesa {
 interface Pedido {
   id: number;
   mesa_id: number;
-  mesa_numero: number; // já vem pronto do JOIN em pedidos.php
+  mesa_numero: number;
   status: StatusPedido;
   data?: string;
 }
@@ -35,7 +32,7 @@ interface ItemPedido {
   quantidade: number;
 }
 
-// Estrutura já pronta para renderização (dados de várias tabelas consolidados)
+// - estrutura já pronta para renderização (dados de várias tabelas consolidados)
 interface PedidoDetalhado {
   pedido: Pedido;
   itens: ItemPedido[];
@@ -43,11 +40,11 @@ interface PedidoDetalhado {
   total: number; // via reduce()
 }
 
-// ---------- Config ----------
+// - config
 
 const API_BASE = "../api";
 
-// ---------- Estado ----------
+// - estado
 
 let pedidos: Pedido[] = [];
 let itensPedido: ItemPedido[] = [];
@@ -70,7 +67,7 @@ const ROTULO_ACAO: Record<StatusPedido, string> = {
   pago: "concluído",
 };
 
-// ---------- Utilidades ----------
+// - utilidades
 
 function formatarPreco(preco: number | string): string {
   const valor = typeof preco === "string" ? parseFloat(preco) : preco;
@@ -117,7 +114,7 @@ async function apiPut<T>(caminho: string, corpo: unknown): Promise<T> {
   return resposta.json() as Promise<T>;
 }
 
-// ---------- Elementos do DOM ----------
+// - elementos do DOM
 
 const highlightCardEl = document.getElementById("highlight-card") as HTMLElement | null;
 const ordersBodyEl = document.getElementById("orders-body") as HTMLElement | null;
@@ -125,7 +122,7 @@ const mesaFilterEl = document.getElementById("mesa-filter") as HTMLSelectElement
 const statusBtns = Array.from(document.querySelectorAll<HTMLButtonElement>(".btn-status"));
 const toastEl = document.getElementById("toast") as HTMLElement | null;
 
-// ---------- Toast ----------
+// - toast
 
 let toastTimer: number | undefined;
 
@@ -138,7 +135,7 @@ function mostrarToast(mensagem: string, tipo: "ok" | "error" = "ok"): void {
   toastTimer = window.setTimeout(() => toastEl.classList.remove("show"), 3200);
 }
 
-// ---------- Carregamento e montagem dos dados ----------
+// - carregamento e montagem dos dados
 
 async function carregarTudo(): Promise<void> {
   if (ordersBodyEl) {
@@ -165,20 +162,20 @@ async function carregarTudo(): Promise<void> {
   }
 }
 
-// Junta pedidos + itens_pedido + produtos + mesas em algo pronto para a tela.
+// - junta pedidos + itens_pedido + produtos + mesas em algo pronto para a tela.
 function montarPedidosDetalhados(): void {
   pedidosDetalhados = pedidos.map((pedido): PedidoDetalhado => {
-    // filter(): separa só os itens deste pedido dentro da lista completa
+    // - filter(): separa só os itens deste pedido dentro da lista completa
     const itensDoPedido = itensPedido.filter((item) => item.pedido_id === pedido.id);
 
-    // map(): transforma cada item em uma linha de texto pronta para exibir ("2x Latte")
+    // - map(): transforma cada item em uma linha de texto pronta para exibir ("2x Latte")
     const linhasItens = itensDoPedido.map((item) => {
       const produto = produtos.find((p) => p.id === item.produto_id);
       const nome = produto ? produto.nome : "produto removido";
       return `${item.quantidade}x ${nome}`;
     });
 
-    // reduce(): soma o valor de todos os itens do pedido em um total financeiro
+    // - reduce(): soma o valor de todos os itens do pedido em um total financeiro
     const total = itensDoPedido.reduce((soma, item) => {
       const produto = produtos.find((p) => p.id === item.produto_id);
       const preco = produto ? precoNumerico(produto.preco) : 0;
@@ -212,7 +209,7 @@ function preencherFiltroDeMesas(): void {
   }
 }
 
-// ---------- Destaque do dia (ranking dinâmico) ----------
+// - destaque do dia (ranking dinâmico)
 
 function renderizarDestaque(): void {
   if (!highlightCardEl) return;
@@ -248,7 +245,7 @@ function renderizarDestaque(): void {
   `;
 }
 
-// ---------- Filtro (segmentação de pedidos) ----------
+// - filtro (segmentação de pedidos)
 
 function pedidosFiltrados(): PedidoDetalhado[] {
   // filter(): aplica o filtro de negócio escolhido (status e/ou mesa) sobre a lista completa
@@ -263,7 +260,7 @@ function ordenarPorRecente(lista: PedidoDetalhado[]): PedidoDetalhado[] {
   return lista.slice().sort((a, b) => b.pedido.id - a.pedido.id);
 }
 
-// ---------- Renderização da tabela ----------
+// - renderização da tabela
 
 function renderizarPedidos(): void {
   if (!ordersBodyEl) return;
@@ -317,7 +314,7 @@ async function avancarStatus(pedido: Pedido, novoStatus: StatusPedido): Promise<
   }
 }
 
-// ---------- Eventos de filtro ----------
+// - eventos de filtro
 
 statusBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -335,7 +332,7 @@ mesaFilterEl?.addEventListener("change", () => {
   renderizarPedidos();
 });
 
-// ---------- Inicialização ----------
+// -inicialização
 
 document.addEventListener("DOMContentLoaded", () => {
   void carregarTudo();
